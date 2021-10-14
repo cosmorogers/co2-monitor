@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CO2 Monitor</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.1/dist/echarts.min.js"></script>
+	<style>
+	    body {
+		    margin: 0;
+			background: lightgrey;
+		}
+		div {
+			display: inline-block;
+		}
+	</style>
+  </head>
+<body>
+  <div id="co2" style="width: 390px;height:390px; margin-top:2em"></div>
+  <div id="temperature" style="width: 390px;height:390px;"></div>
+
+  <script type="text/javascript">
+var chartDom = document.getElementById('co2');
+var myChart = echarts.init(chartDom);
+var option;
+option = {
+  series: [
+    {
+      name: 'Pressure',
+      type: 'gauge',
+      min: 0,
+      max: 5000,
+      splitNumber: 10,
+      detail: {
+        valueAnimation: true,
+        formatter: '{value} ppm',
+      },
+      progress: {
+        show: true,
+        width: 5
+      },
+      axisLine: {
+        lineStyle: {
+          width: 30,
+		  color: [
+            [0.2, '#28a745'],
+            [0.5, '#ffc107'],
+            [1, '#fd666d']
+          ]
+        }
+      },
+      axisTick: {
+        distance: -30,
+        splitNumber: 5,
+        lineStyle: {
+          width: 2,
+          color: '#fff'
+        }
+      },
+      splitLine: {
+        distance: -45,
+        length: 14,
+        lineStyle: {
+          width: 3,
+          color: '#999'
+        }
+      },
+      axisLabel: {
+        distance: -20,
+        color: '#999',
+        fontSize: 20
+      },
+      data: [
+        {
+          value: 0,
+          name: 'CO2 Level'
+        }
+      ]
+    }
+  ]
+};
+
+
+
+var tempChartDom = document.getElementById('temperature');
+var tempChart = echarts.init(tempChartDom);
+var optionTemp;
+optionTemp = {
+  series: [
+    {
+      name: 'Temperature',
+      type: 'gauge',
+      min: 0,
+      max: 30,
+      splitNumber: 6,
+      detail: {
+        valueAnimation: true,
+        formatter: '{value} °C',
+      },
+      progress: {
+        show: true,
+        width: 30
+      },
+      axisLine: {
+        lineStyle: {
+          width: 30,
+        }
+      },
+      axisTick: {
+        distance: -30,
+        splitNumber: 5,
+        lineStyle: {
+          width: 2,
+          color: '#fff'
+        }
+      },
+      splitLine: {
+        distance: -45,
+        length: 14,
+        lineStyle: {
+          width: 3,
+          color: '#999'
+        }
+      },
+      axisLabel: {
+        distance: -20,
+        color: '#999',
+        fontSize: 20
+      },
+      data: [
+        {
+          value: 0,
+          name: 'Temperature'
+        }
+      ]
+    }
+  ]
+};
+
+
+
+setInterval(function () {
+   fetch('/api').then(res => {
+     res.json().then(data => {
+       myChart.setOption({
+         series: [{ data: [{ value: data.co2 } ]}]
+       });
+       tempChart.setOption({
+         series: [{ data: [{ value: data.temperature } ]}]
+       });
+     });
+   });  
+}, 2000);
+
+option && myChart.setOption(option);
+optionTemp && tempChart.setOption(optionTemp);
+</script>
+
+
+</body>
+</html>
