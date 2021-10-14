@@ -1,4 +1,4 @@
-#Raspberry Pi CO2 Monitor
+# Raspberry Pi CO2 Monitor
 
 Uses a Pi & a [pi3g CO2 Sensor breakout](https://pi3g.com/products/rpi-co2-sens-precision-long-term-calibrated-co2-sensor/) board
 
